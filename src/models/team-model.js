@@ -3,12 +3,6 @@ import { plugins } from 'mostly-feathers-mongoose';
 import { models as contents } from 'playing-content-services';
 import { models as rules } from 'playing-rule-services';
 
-const access = {
-  public: { type: Boolean },               // public to join
-  protected: { type: Boolean },            // request based
-  private: { type: Boolean }               // invite only
-};
-
 const settings = {
   maxPlayers: { type: Number },            // maximum number of players that any instances of this type can contain
   maxTeams: { type: Number },              // maximum number of instances of this type that can be created
@@ -34,7 +28,9 @@ const fields = {
   name: { type: String, required: true },  // name for the team
   description: { type: String },           // brief description of the team
   image: contents.blob.schema,             // image which represents the team
-  access: access,                          // access settings with which the team instance can be created
+  access: [{ type: String, enum: [         // access settings with which the team instance can be created.
+    'public', 'protected', 'private'
+  ]}],
   settings: settings,                      // settings for the whole team
   permissions: permissions,                // array of roles with permissions associated
   creatorRoles: [{type: String }],         // array of roles which will be assigned to creator
