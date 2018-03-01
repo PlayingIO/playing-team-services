@@ -1,7 +1,10 @@
-import timestamps from 'mongoose-timestamp';
 import { plugins } from 'mostly-feathers-mongoose';
 import { models as contents } from 'playing-content-services';
 import { models as rules } from 'playing-rule-services';
+
+const options = {
+  timestamps: true
+};
 
 const settings = {
   maxPlayers: { type: Number },            // maximum number of players that any instances of this type can contain
@@ -41,8 +44,7 @@ const fields = {
 
 export default function model (app, name) {
   const mongoose = app.get('mongoose');
-  const schema = new mongoose.Schema(fields);
-  schema.plugin(timestamps);
+  const schema = new mongoose.Schema(fields, options);
   schema.plugin(plugins.softDelete);
   return mongoose.model(name, schema);
 }
