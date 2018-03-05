@@ -13,7 +13,7 @@ const settings = {
   creation: { type: String, enum: [        // whether the team definition will only be available to public or game admins
     'public', 'private'
   ]},
-  requires: rules.rule.requires,           // requirements for creation of an instance from this definition
+  requires: rules.requires.schema,         // requirements for creation of an instance from this definition
 };
 
 const permissions = [{
