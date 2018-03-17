@@ -1,11 +1,14 @@
 import { hooks } from 'mostly-feathers-mongoose';
+import { cache } from 'mostly-feathers-cache';
+
 import TeamEntity from '~/entities/team-entity';
 
 module.exports = function(options = {}) {
   return {
     before: {
       all: [
-        hooks.authenticate('jwt', options.auth)
+        hooks.authenticate('jwt', options.auth),
+        cache(options.cache)
       ],
       update: [
         hooks.discardFields('id', 'createdAt', 'updatedAt', 'destroyedAt')
@@ -16,6 +19,7 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
+        cache(options.cache),
         hooks.presentEntity(TeamEntity, options),
         hooks.responder()
       ]
