@@ -2,8 +2,8 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
-import TeamModel from '~/models/team-model';
-import defaultHooks from './team-hooks';
+import TeamModel from '~/models/team.model';
+import defaultHooks from './team.hooks';
 
 const debug = makeDebug('playing:teams-services:teams');
 
