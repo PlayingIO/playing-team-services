@@ -26,7 +26,7 @@ const permissions = [{
   }
 }];
 
-/*
+/**
  * Teams let you organize your players into meaningful groups.
  */
 const fields = {
