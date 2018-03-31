@@ -1,7 +1,7 @@
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 
-import TeamEntity from '~/entities/team.entity';
+import TeamEntity from '../../entities/team.entity';
 
 export default function (options = {}) {
   return {
