@@ -11,7 +11,7 @@ const settings = {
   maxTeams: { type: Number },              // maximum number of instances of this type that can be created
   playerTeams: { type: Number },           // maximum number of instances of this type that a player can createed
   creation: { type: String, enum: [        // whether the team definition will only be available to public or game admins
-    'public', 'private'
+    'PUBLIC', 'PRIVATE'
   ]},
   requires: rules.requires.schema,         // requirements for creation of an instance from this definition
 };
@@ -34,7 +34,7 @@ const fields = {
   description: { type: String },           // brief description of the team
   image: contents.blob.schema,             // image which represents the team
   access: [{ type: String, enum: [         // access settings with which the team instance can be created.
-    'public', 'protected', 'private'
+    'PUBLIC', 'PROTECTED', 'PRIVATE'
   ]}],
   settings: settings,                      // settings for the whole team
   permissions: permissions,                // array of roles with permissions associated
