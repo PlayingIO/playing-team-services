@@ -13,7 +13,7 @@ const defaultOptions = {
 
 export class TeamService extends Service {
   constructor (options) {
-    options = Object.assign({}, defaultOptions, options);
+    options = fp.assign(defaultOptions, options);
     super(options);
   }
 
@@ -24,7 +24,7 @@ export class TeamService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = Object.assign({ ModelName: 'team' }, options);
+  options = fp.assign({ ModelName: 'team' }, options);
   return createService(app, TeamService, TeamModel, options);
 }
 
