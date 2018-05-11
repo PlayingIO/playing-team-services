@@ -24,7 +24,7 @@ export class TeamService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'team' }, options);
+  options = { ModelName: 'team', ...options };
   return createService(app, TeamService, TeamModel, options);
 }
 
