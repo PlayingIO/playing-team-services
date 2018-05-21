@@ -1,7 +1,7 @@
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 
-import TeamEntity from '../../entities/team.entity';
+import TeamDesignEntity from '../../entities/team-design.entity';
 
 export default function (options = {}) {
   return {
@@ -20,7 +20,7 @@ export default function (options = {}) {
     after: {
       all: [
         cache(options.cache),
-        hooks.presentEntity(TeamEntity, options.entities),
+        hooks.presentEntity(TeamDesignEntity, options.entities),
         hooks.responder()
       ]
     }
