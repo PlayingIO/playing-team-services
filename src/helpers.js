@@ -6,6 +6,18 @@ export const fulfillTeamRequires = (team, user) => {
   return rules.fulfillRequires(user, [], team.settings.requires);
 };
 
+// validator for roles
+export const rolesExists = (service, id, message) => async (val, params) => {
+  const team = await service.get(params[id]);
+  const roles = fp.keys(val);
+  if (team && team.roles) {
+    if (fp.includesAll(roles, team.roles)) return;
+  } else {
+    message = 'Team roles is not exists';
+  }
+  return message;
+};
+
 // create a group activity
 export const createTeamActivity = (context, team, custom) => {
   const actor = helpers.getId(team.owner);
