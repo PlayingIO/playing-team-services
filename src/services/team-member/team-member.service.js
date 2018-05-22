@@ -56,8 +56,8 @@ export class TeamMemberService {
     assert(team, 'target team is not exists');
     assert(assert.access !== 'PRIVATE', 'The team is private and invite only.');
 
-    let groups = params.user.groups;
-    const exists = fp.find(fp.idPropEq('group', team.id), groups || []);
+    let groups = fp.map(fp.prop('id'), params.user.groups);
+    const exists = fp.find(fp.idEquals(team.id), groups || []);
     if (exists) {
       throw new Error('You are already a member of the team.');
     }
@@ -69,7 +69,7 @@ export class TeamMemberService {
         group: team.id,
         role: fp.keys(data.roles)
       }, {
-        primary: params.user,
+        target: params.user,
         user: params.user
       });
     } else {
