@@ -11,9 +11,10 @@ export const createTeamActivity = (context, team, custom) => {
   const actor = helpers.getId(team.owner);
   return {
     actor: `user:${actor}`,
-    object: `team-design:${team.definition}`,
+    object: `${team.type}:${team.id}`,
     foreignId: `${team.type}:${team.id}`,
     time: new Date().toISOString(),
+    definition: team.definition,
     ...custom
   };
 };
