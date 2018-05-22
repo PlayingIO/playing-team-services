@@ -5,16 +5,17 @@ import { createTeamActivity, membersNotifications } from '../../helpers';
 
 // create team activity
 const createTeam = (context) => {
-  const group = helpers.getHookData(context);
+  const team = helpers.getHookData(context);
+  if (!team) return;
   const actor = context.params.user.id;
-  const notifications = membersNotifications(group.users);
+  const notifications = membersNotifications(team.users);
   const custom = {
     actor: `user:${actor}`,
     verb: 'group.create',
     message: 'Create a team',
   };
   return [
-    createTeamActivity(context, group, custom),
+    createTeamActivity(context, team, custom),
     `user:${actor}`,                 // add to actor's activity log
     notifications                    // add to members' notification stream
   ];
@@ -22,16 +23,17 @@ const createTeam = (context) => {
 
 // delete team activity
 const deleteTeam = (context) => {
-  const group = helpers.getHookData(context);
+  const team = helpers.getHookData(context);
+  if (!team) return;
   const actor = context.params.user.id;
-  const notifications = membersNotifications(group.users);
+  const notifications = membersNotifications(team.users);
   const custom = {
     actor: `user:${actor}`,
     verb: 'group.delete',
     message: 'Delete a team',
   };
   return [
-    createTeamActivity(context, group, custom),
+    createTeamActivity(context, team, custom),
     `user:${actor}`,                 // add to actor's activity log
     notifications                    // add to members' notification stream
   ];

@@ -10,7 +10,7 @@ const settings = {
   maxPlayers: { type: Number },            // maximum number of players that any instances of this type can contain
   maxTeams: { type: Number },              // maximum number of instances of this type that can be created
   playerTeams: { type: Number },           // maximum number of instances of this type that a player can createed
-  creation: { type: String, enum: [        // whether the team definition will only be available to public or game admins
+  creation: { type: String, enum: [        // whether the team definition will only be available to public or admins only
     'PUBLIC', 'PRIVATE'
   ]},
   requires: rules.requires.schema,         // requirements for creation of an instance from this definition
