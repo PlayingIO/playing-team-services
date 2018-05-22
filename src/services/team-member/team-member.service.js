@@ -22,7 +22,7 @@ export class TeamMemberService {
   }
 
   /**
-   * find members of target team
+   * List all members of the target team
    */
   async find (params) {
     params = { query: {}, ...params };
@@ -33,6 +33,19 @@ export class TeamMemberService {
     };
     const svcUsers = this.app.service('users');
     return svcUsers.find(params);
+  }
+
+  /**
+   * Get the profile of a team member
+   */
+  async get (id, params) {
+    const team = params.team;
+    assert(team, 'target team is not exists');
+    params.query.groups = {
+      $elemMatch: { group: team.id }
+    };
+    const svcUsers = this.app.service('users');
+    return svcUsers.get(id, params);
   }
 }
 
