@@ -14,3 +14,5 @@ export default function model (app, name) {
   const schema = new mongoose.Schema(fields);
   return GroupModel.discriminator(name, schema);
 }
+
+model.schema = fields;
