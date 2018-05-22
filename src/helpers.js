@@ -1,3 +1,4 @@
+import assert from 'assert';
 import fp from 'mostly-func';
 import { helpers } from 'mostly-feathers-mongoose';
 import { helpers as rules } from 'playing-rule-services';
@@ -8,7 +9,8 @@ export const fulfillTeamRequires = (team, user) => {
 
 // validator for roles
 export const rolesExists = (service, id, message) => async (val, params) => {
-  const team = await service.get(params[id]);
+  assert(params[id], `rolesExists '${id}' is not exists in validation params`);
+  const team = fp.isIdLike(params[id])? await service.get(params[id]) : params[id];
   const roles = fp.keys(val);
   if (team && team.roles) {
     if (fp.includesAll(roles, team.roles)) return;
