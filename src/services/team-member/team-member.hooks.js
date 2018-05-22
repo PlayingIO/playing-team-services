@@ -14,13 +14,13 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       find: [
-        hooks.addRouteObject('team', { service: 'teams' })
+        hooks.addRouteObject('primary', { service: 'teams' })
       ],
       get: [
-        hooks.addRouteObject('team', { service: 'teams' })
+        hooks.addRouteObject('primary', { service: 'teams' })
       ],
       create: [
-        hooks.addRouteObject('team', { service: 'teams' }),
+        hooks.addRouteObject('primary', { service: 'teams' }),
         sanitize(accepts),
         validate(accepts),
       ],

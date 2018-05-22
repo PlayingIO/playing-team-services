@@ -26,7 +26,7 @@ export class TeamMemberService {
    */
   async find (params) {
     params = { query: {}, ...params };
-    const team = params.team;
+    const team = params.primary;
     assert(team, 'target team is not exists');
     params.query.groups = {
       $elemMatch: { group: team.id }
@@ -39,7 +39,7 @@ export class TeamMemberService {
    * Get the profile of a team member
    */
   async get (id, params) {
-    const team = params.team;
+    const team = params.primary;
     assert(team, 'target team is not exists');
     params.query.groups = {
       $elemMatch: { group: team.id }
@@ -52,7 +52,7 @@ export class TeamMemberService {
    * Join a team with specified the role
    */
   async create (data, params) {
-    const team = params.team;
+    const team = params.primary;
     assert(team, 'target team is not exists');
     assert(assert.access !== 'PRIVATE', 'The team is private and invite only.');
 
