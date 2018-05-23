@@ -63,9 +63,9 @@ export class TeamMemberService {
     }
 
     // process the join for public mission
-    const svcUsersGroupsService = this.app.service('users/groups');
+    const svcUsersGroups = this.app.service('users/groups');
     if (team.access === 'PUBLIC') {
-      groups = await svcUsersGroupsService.create({
+      groups = await svcUsersGroups.create({
         group: team.id,
         role: fp.keys(data.roles)
       }, {
@@ -117,9 +117,43 @@ export class TeamMemberService {
       throw new Error('You are not a performer of this mission.');
     }
 
-    const svcUsersGroupsService = this.app.service('users/groups');
-    groups = await svcUsersGroupsService.remove(null, {
+    const svcUsersGroups = this.app.service('users/groups');
+    groups = await svcUsersGroups.remove(null, {
       primary: params.user,
+      user: params.user,
+      query: { group: team.id }
+    });
+
+    params.locals = { team }; // for notifier
+
+    return groups;
+  }
+
+  /**
+   * Kick out a member from the team.
+   */
+  async kick (id, params) {
+    const team = params.primary;
+    assert(team, 'target team is not exists');
+
+    // must be owner of the team
+    if (!fp.idEquals(team.owner, params.user.id)) {
+      throw new Error('Only owner of the team can kick a player.');
+    }
+    // the owner cannot kicked out himself
+    if (fp.idEquals(team.owner, id)) {
+      throw new Error('Owner of the team cannot kick yourself.');
+    }
+
+    let groups = fp.map(fp.prop('id'), params.user.groups);
+    const exists = fp.find(fp.idEquals(team.id), groups || []);
+    if (!exists) {
+      throw new Error('You are not a performer of this mission.');
+    }
+
+    const svcUsersGroups = this.app.service('users/groups');
+    groups = await svcUsersGroups.remove(null, {
+      primary: id,
       user: params.user,
       query: { group: team.id }
     });
