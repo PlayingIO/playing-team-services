@@ -56,6 +56,9 @@ export class TeamMemberService {
     assert(team, 'target team is not exists');
     assert(assert.access !== 'PRIVATE', 'The team is private and invite only.');
 
+    const svcUsersGroups = this.app.service('users/groups');
+    const svcFeedsActivities = this.app.service('feeds/activities');
+
     // whether current user is a member
     let groups = fp.map(fp.prop('id'), params.user.groups);
     const exists = fp.find(fp.idEquals(team.id), groups || []);
@@ -64,7 +67,6 @@ export class TeamMemberService {
     }
 
     // process the join for public team
-    const svcUsersGroups = this.app.service('users/groups');
     if (team.access === 'PUBLIC') {
       groups = await svcUsersGroups.create({
         group: team.id,
@@ -75,7 +77,6 @@ export class TeamMemberService {
       });
     } else {
       // check for pending join request sent by current user
-      const svcFeedsActivities = this.app.service('feeds/activities');
       const invitations = await svcFeedsActivities.find({
         primary: `notification:${team.owner}`,
         query: {
@@ -108,6 +109,8 @@ export class TeamMemberService {
       return this.kick(id, params);
     }
 
+    const svcUsersGroups = this.app.service('users/groups');
+
     // the owner himself cannot leave
     if (fp.idEquals(team.owner, params.user.id)) {
       throw new Error('Owner of the team cannot leave yourself.');
@@ -120,7 +123,6 @@ export class TeamMemberService {
       throw new Error('You are not a member of this team.');
     }
 
-    const svcUsersGroups = this.app.service('users/groups');
     groups = await svcUsersGroups.remove(null, {
       primary: params.user,
       user: params.user,
@@ -139,6 +141,9 @@ export class TeamMemberService {
     const team = params.primary;
     assert(team, 'target team is not exists');
 
+    const svcUsers = this.app.service('users');
+    const svcUsersGroups = this.app.service('users/groups');
+
     // must be owner of the team
     if (!fp.idEquals(team.owner, params.user.id)) {
       throw new Error('Only owner of the team can kick a player.');
@@ -148,14 +153,14 @@ export class TeamMemberService {
       throw new Error('Owner of the team cannot kick yourself.');
     }
 
-    // whether current user is a member
-    let groups = fp.map(fp.prop('id'), params.user.groups);
+    // whether target user is a member
+    const user = await svcUsers.get(id);
+    let groups = fp.map(fp.prop('id'), user.groups);
     const exists = fp.find(fp.idEquals(team.id), groups || []);
     if (!exists) {
-      throw new Error('You are not a member of this team.');
+      throw new Error('Target user is not a member of this team.');
     }
 
-    const svcUsersGroups = this.app.service('users/groups');
     groups = await svcUsersGroups.remove(null, {
       primary: id,
       user: params.user,
