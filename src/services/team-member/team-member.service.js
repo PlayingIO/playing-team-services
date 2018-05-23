@@ -68,7 +68,7 @@ export class TeamMemberService {
     if (team.access === 'PUBLIC') {
       groups = await svcUsersGroups.create({
         group: team.id,
-        role: fp.keys(data.roles)
+        role: data.roles
       }, {
         primary: params.user,
         user: params.user
