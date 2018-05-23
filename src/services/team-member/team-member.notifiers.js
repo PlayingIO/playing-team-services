@@ -56,7 +56,29 @@ const leaveTeam = (context) => {
   ];
 };
 
+// kick from team activity
+const kickTeam = (context) => {
+  const { team } = context.params.locals;
+  const actor = context.params.user.id;
+  const player = context.id;
+  const notifications = membersNotifications(team.members);
+  const custom = {
+    actor: `user:${actor}`,
+    verb: 'team.kick',
+    message: 'Join the team',
+    roles: context.data.roles
+  };
+  return [
+    createTeamActivity(context, team, custom),
+    `user:${player}`,              // add to kicked player's activity log
+    `notification:${player}`,      // add to kicked player's notification stream
+    `team:${team.id}`,             // add to team's activity log
+    notifications                  // add to all members' notification stream
+  ];
+};
+
 export default {
   'team.join': joinTeam,
   'team.leave': leaveTeam,
+  'team.kick': kickTeam
 };
