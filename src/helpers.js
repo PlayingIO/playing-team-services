@@ -35,6 +35,6 @@ export const createTeamActivity = (context, team, custom) => {
 
 // notification feeds of all team members
 export const membersNotifications = function (members, excepts = []) {
-  const users = fp.without(excepts, fp.map(fp.prop('user'), members || []));
+  const users = fp.without(excepts, fp.map(fp.prop('id'), members || []));
   return fp.map(fp.concat('notification:'), users);
 };
