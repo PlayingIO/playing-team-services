@@ -49,7 +49,7 @@ export class TeamMemberService {
   }
 
   /**
-   * Join a team with specified the role
+   * Join a team with specified the role.
    */
   async create (data, params) {
     const team = params.primary;
@@ -69,7 +69,7 @@ export class TeamMemberService {
         group: team.id,
         role: fp.keys(data.roles)
       }, {
-        target: params.user,
+        primary: params.user,
         user: params.user
       });
     } else {
@@ -89,6 +89,40 @@ export class TeamMemberService {
       }
       // send team.join.request in notifier
     }
+
+    params.locals = { team }; // for notifier
+
+    return groups;
+  }
+
+  /**
+   * Leave a team.
+   */
+  async remove (id, params) {
+    const team = params.primary;
+    assert(team, 'target team is not exists');
+
+    // kick intead leave
+    if (params.action === 'kick') {
+      return this.kick(id, params);
+    }
+
+    // the owner himself cannot leave
+    if (fp.idEquals(team.owner, params.user.id)) {
+      throw new Error('Owner of the team cannot leave yourself.');
+    }
+    let groups = fp.map(fp.prop('id'), params.user.groups);
+    const exists = fp.find(fp.idEquals(team.id), groups || []);
+    if (!exists) {
+      throw new Error('You are not a performer of this mission.');
+    }
+
+    const svcUsersGroupsService = this.app.service('users/groups');
+    groups = await svcUsersGroupsService.remove(null, {
+      primary: params.user,
+      user: params.user,
+      query: { group: team.id }
+    });
 
     params.locals = { team }; // for notifier
 

@@ -24,6 +24,9 @@ export default function (options = {}) {
         sanitize(accepts),
         validate(accepts),
       ],
+      remove: [
+        hooks.addRouteObject('primary', { service: 'teams' })
+      ]
     },
     after: {
       all: [
