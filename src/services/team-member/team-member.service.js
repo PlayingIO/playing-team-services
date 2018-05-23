@@ -56,13 +56,14 @@ export class TeamMemberService {
     assert(team, 'target team is not exists');
     assert(assert.access !== 'PRIVATE', 'The team is private and invite only.');
 
+    // whether current user is a member
     let groups = fp.map(fp.prop('id'), params.user.groups);
     const exists = fp.find(fp.idEquals(team.id), groups || []);
     if (exists) {
       throw new Error('You are already a member of the team.');
     }
 
-    // process the join for public mission
+    // process the join for public team
     const svcUsersGroups = this.app.service('users/groups');
     if (team.access === 'PUBLIC') {
       groups = await svcUsersGroups.create({
@@ -111,10 +112,12 @@ export class TeamMemberService {
     if (fp.idEquals(team.owner, params.user.id)) {
       throw new Error('Owner of the team cannot leave yourself.');
     }
+
+    // whether current user is a member
     let groups = fp.map(fp.prop('id'), params.user.groups);
     const exists = fp.find(fp.idEquals(team.id), groups || []);
     if (!exists) {
-      throw new Error('You are not a performer of this mission.');
+      throw new Error('You are not a member of this team.');
     }
 
     const svcUsersGroups = this.app.service('users/groups');
@@ -145,10 +148,11 @@ export class TeamMemberService {
       throw new Error('Owner of the team cannot kick yourself.');
     }
 
+    // whether current user is a member
     let groups = fp.map(fp.prop('id'), params.user.groups);
     const exists = fp.find(fp.idEquals(team.id), groups || []);
     if (!exists) {
-      throw new Error('You are not a performer of this mission.');
+      throw new Error('You are not a member of this team.');
     }
 
     const svcUsersGroups = this.app.service('users/groups');
