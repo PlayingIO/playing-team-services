@@ -38,6 +38,25 @@ const joinTeam = (context) => {
   }
 };
 
+// leave team activity
+const leaveTeam = (context) => {
+  const { team } = context.params.locals;
+  const actor = context.params.user.id;
+  const notifications = membersNotifications(team.members);
+  const custom = {
+    actor: `user:${actor}`,
+    verb: 'team.leave',
+    message: 'Leave the team'
+  };
+  return [
+    createTeamActivity(context, team, custom),
+    `user:${actor}`,                 // add to player's activity log
+    `team:${team.id}`,               // add to team's activity log
+    notifications                    // add to all members' notification stream
+  ];
+};
+
 export default {
   'team.join': joinTeam,
+  'team.leave': leaveTeam,
 };
