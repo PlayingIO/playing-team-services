@@ -8,7 +8,7 @@ const createTeam = (context) => {
   const team = helpers.getHookData(context);
   if (!team) return;
   const actor = context.params.user.id;
-  const notifications = membersNotifications(team.users);
+  const notifications = membersNotifications(team.members);
   const custom = {
     actor: `user:${actor}`,
     verb: 'group.create',
@@ -26,7 +26,7 @@ const deleteTeam = (context) => {
   const team = helpers.getHookData(context);
   if (!team) return;
   const actor = context.params.user.id;
-  const notifications = membersNotifications(team.users);
+  const notifications = membersNotifications(team.members);
   const custom = {
     actor: `user:${actor}`,
     verb: 'group.delete',

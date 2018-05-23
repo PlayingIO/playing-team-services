@@ -5,6 +5,7 @@ import { sanitize, validate } from 'mostly-feathers-validate';
 import { hooks as feeds } from 'playing-feed-services';
 
 import accepts from './team-member.accepts';
+import notifiers from './team-member.notifiers';
 
 export default function (options = {}) {
   return {
@@ -20,12 +21,12 @@ export default function (options = {}) {
         hooks.addRouteObject('primary', { service: 'teams' })
       ],
       create: [
-        hooks.addRouteObject('primary', { service: 'teams' }),
+        hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
         sanitize(accepts),
         validate(accepts)
       ],
       remove: [
-        hooks.addRouteObject('primary', { service: 'teams' }),
+        hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
         sanitize(accepts),
         validate(accepts)
       ]
@@ -34,6 +35,16 @@ export default function (options = {}) {
       all: [
         cache(options.cache),
         hooks.responder()
+      ],
+      create: [
+        feeds.notify('team.join', notifiers)
+      ],
+      remove: [
+        iff(hooks.isAction('kick'),
+          feeds.notify('team.kick', notifiers))
+        .else(
+          feeds.notify('team.leave', notifiers)
+        )
       ]
     }
   };
