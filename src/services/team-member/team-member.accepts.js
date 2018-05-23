@@ -11,7 +11,13 @@ export default function accepts (context) {
     validates: { exists: rolesExists(svcTeams, 'primary', 'Roles is invalid') },
     required: true, description: 'Roles ' };
 
+  const member = { arg: 'id', type: 'string',
+    validates: { exists: helpers.idExists(svcUsers, 'id', 'Member is not exists') },
+    required: true, description: 'Member Id' };
+
   return {
-    create: [ roles ]
+    create: [ roles ],
+    remove: [ member ],
+    kick: [ member ]
   };
 }

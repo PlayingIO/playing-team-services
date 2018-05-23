@@ -22,10 +22,12 @@ export default function (options = {}) {
       create: [
         hooks.addRouteObject('primary', { service: 'teams' }),
         sanitize(accepts),
-        validate(accepts),
+        validate(accepts)
       ],
       remove: [
-        hooks.addRouteObject('primary', { service: 'teams' })
+        hooks.addRouteObject('primary', { service: 'teams' }),
+        sanitize(accepts),
+        validate(accepts)
       ]
     },
     after: {
