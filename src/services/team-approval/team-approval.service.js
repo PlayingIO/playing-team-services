@@ -48,6 +48,77 @@ export class TeamApprovalService {
   }
 
   /**
+   * Approve team join or role change request
+   */
+  async patch (id, data, params) {
+    let team = params.primary;
+    assert(team && team.id, 'Team is not exists.');
+
+    // must be owner of the team
+    if (!fp.idEquals(team.owner, params.user.id)) {
+      throw new Error('Only owner of the team can approval the request.');
+    }
+
+    const svcUsersGroups = this.app.service('users/groups');
+    const svcFeedsActivities = this.app.service('feeds/activities');
+
+    // check for pending requests
+    const notification = `notification:${params.user.id}`;
+    const activity = await feeds.getPendingActivity(this.app, notification, id);
+    if (!activity) {
+      throw new Error(`No pending request is found: ${id}.`);
+    }
+
+    // get values from activity
+    const user = helpers.getId(activity.actor);
+    const roles = activity.roles;
+    assert(user, 'actor not exists in request activity');
+    assert(roles, 'roles not exists in request activity');
+
+    params.locals = { team }; // for notifier
+
+    switch (activity.verb) {
+      case 'team.join.request': {
+        const performer = fp.find(fp.idPropEq('user', user), team.performers || []);
+        if (!performer) {
+          await svcUsersGroups.create({
+            group: team.id,
+            roles: roles
+          }, { 
+            primary: user,
+            user: params.user
+          });
+          activity.state = 'ACCEPTED';
+          await feeds.updateActivityState(this.app, activity);
+          params.locals.activity = activity;
+        } else {
+          activity.state = 'ALREADY';
+          await feeds.updateActivityState(this.app, activity);
+          params.locals.activity = activity;
+        }
+        break;
+      }
+      case 'team.roles.request': {
+        await svcUsersGroups.patch(team.id, {
+          group: team.id,
+          roles: roles
+        }, {
+          primary: user,
+          user: params.user
+        });
+        activity.state = 'ACCEPTED';
+        await feeds.updateActivityState(this.app, activity);
+        params.locals.activity = activity;
+        break;
+      }
+      default:
+        throw new Error(`Unkown activity verb: ${activity.verb}`);
+    }
+
+    return activity;
+  }
+
+  /**
    * Cancel a pending request sent out by the current user
    */
   async remove (id, params) {
@@ -71,7 +142,7 @@ export class TeamApprovalService {
    * Reject a pending request
    */
   async reject (id, params) {
-    let team = params.primary;
+    const team = params.primary;
     assert(team && team.id, 'Team is not exists.');
 
     // must be owner of the team
