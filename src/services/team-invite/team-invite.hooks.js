@@ -9,7 +9,10 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       find: [
-        hooks.addRouteObject('primary', { service: 'teams' }),
+        hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
+      ],
+      create: [
+        hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
       ]
     },
     after: {

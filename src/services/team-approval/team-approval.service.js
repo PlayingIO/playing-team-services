@@ -81,6 +81,7 @@ export class TeamApprovalService {
       case 'team.join.request': {
         const performer = fp.find(fp.idPropEq('user', user), team.performers || []);
         if (!performer) {
+          // add user to team with roles
           await svcUsersGroups.create({
             group: team.id,
             roles: roles
@@ -99,6 +100,7 @@ export class TeamApprovalService {
         break;
       }
       case 'team.roles.request': {
+        // update user's roles in team
         await svcUsersGroups.patch(team.id, {
           group: team.id,
           roles: roles
