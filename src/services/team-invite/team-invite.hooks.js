@@ -4,6 +4,7 @@ import { cache } from 'mostly-feathers-cache';
 import { sanitize, validate } from 'mostly-feathers-validate';
 import { hooks as feeds } from 'playing-feed-services';
 
+import accepts from './team-invite.accepts';
 import notifiers from './team-invite.notifiers';
 
 export default function (options = {}) {
@@ -14,16 +15,22 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       find: [
-        hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
+        hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' })
       ],
       create: [
         hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
+        sanitize(accepts),
+        validate(accepts)
       ],
       patch: [
         hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
+        sanitize(accepts),
+        validate(accepts)
       ],
       remove: [
         hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
+        sanitize(accepts),
+        validate(accepts)
       ]
     },
     after: {
