@@ -27,6 +27,28 @@ const acceptInvite = (context) => {
   ];
 };
 
+// invite reject activity
+const rejectInvite = (context) => {
+  const { team, activity } = context.params.locals;
+  if (!activity || activity.state !== 'REJECTED') return;
+
+  const actor = context.params.user.id;
+  const inviter = helpers.getId(activity.actor);
+  let custom = {
+    actor: `user:${actor}`,
+    inviter: `user:${inviter}`,
+    verb: 'team.invite.reject',
+    message: 'Invite request reject',
+    roles: activity.roles
+  };
+  return [
+    createTeamActivity(context, team, custom),
+    `notification:${actor}`,       // add to player's 
+    `user:${inviter}`              // add to inviter's notification stream
+  ];
+};
+
 export default {
-  'team.invite.accept': acceptInvite
+  'team.invite.accept': acceptInvite,
+  'team.invite.reject': rejectInvite
 };

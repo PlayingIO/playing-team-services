@@ -33,6 +33,10 @@ export default function (options = {}) {
       ],
       patch: [
         feeds.notify('team.invite.accept', notifiers),
+      ],
+      remove: [
+        iff(hooks.isAction('reject'),
+          feeds.notify('team.invite.reject', notifiers))
       ]
     }
   };
