@@ -169,6 +169,28 @@ export class TeamInviteService {
     await feeds.updateActivityState(this.app, activity);
     return activity;
   }
+
+  /**
+   * Reject an invitation
+   */
+  async reject (id, params) {
+    let team = params.primary;
+    assert(team && team.id, 'Team is not exists.');
+
+    // check for pending invitation in notification of current user
+    const notification = `notification:${params.user.id}`;
+    const activity = await feeds.getPendingActivity(this.app, notification, id);
+    if (!activity) {
+      throw new Error('No pending invitation is found for this invite id.');
+    }
+    // reject from invitee's feed
+    activity.state = 'REJECTED';
+    await feeds.updateActivityState(this.app, activity);
+
+    params.locals = { team, activity }; // for notifier
+    
+    return activity;
+  }
 }
 
 export default function init (app, options, hooks) {
