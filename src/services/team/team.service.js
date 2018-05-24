@@ -29,7 +29,8 @@ class TeamService extends group.Service {
     delete data.isPublic;
 
     const svcTeamDesigns = this.app.service('team-designs');
-    const svcPermissions = this.app.service('user-permissions');
+    const svcUsersGroups = this.app.service('users/groups');
+    const svcUserPermissions = this.app.service('user-permissions');
 
     const getTeamDefinition = (id) => id? svcTeamDesigns.get(id) : Promise.resolve(null);
 
@@ -48,13 +49,16 @@ class TeamService extends group.Service {
       data.definition = teamDef.id;
       data.roles = fp.map(fp.prop('role'), teamDef.permissions || []);
     }
+
+    // create team group
     const group = await super.create(data, params);
+    // create permissions for the group
     if (teamDef && teamDef.permissions) {
       const createPermissions = fp.flatMap(permission => {
         return fp.map(([action, permit]) => {
-          return svcPermissions.create({
+          return svcUserPermissions.create({
             actions: [action],
-            subject: 'group:' + group.id,
+            subject: 'team:' + group.id,
             role: permission.role,
             inverted: !permit,
             creator: data.owner,
@@ -64,6 +68,16 @@ class TeamService extends group.Service {
       }, teamDef.permissions);
       const permissions = await Promise.all(createPermissions);
       group.permissions = fp.flatten(permissions);
+    }
+    // add creator roles
+    if (teamDef.creatorRoles) {
+      await svcUsersGroups.create({
+        group: group.id,
+        role: teamDef.creatorRoles
+      }, {
+        primary: params.user,
+        user: params.user
+      });
     }
     
     return group;
