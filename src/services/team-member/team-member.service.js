@@ -27,7 +27,7 @@ export class TeamMemberService {
   async find (params) {
     params = { query: {}, ...params };
     const team = params.primary;
-    assert(team, 'target team is not exists');
+    assert(team && team.id, 'target team is not exists');
     params.query.groups = {
       $elemMatch: { group: team.id }
     };
@@ -40,7 +40,7 @@ export class TeamMemberService {
    */
   async get (id, params) {
     const team = params.primary;
-    assert(team, 'target team is not exists');
+    assert(team && team.id, 'target team is not exists');
     params.query.groups = {
       $elemMatch: { group: team.id }
     };
@@ -53,7 +53,7 @@ export class TeamMemberService {
    */
   async create (data, params) {
     const team = params.primary;
-    assert(team, 'target team is not exists');
+    assert(team && team.id, 'target team is not exists');
     assert(assert.access !== 'PRIVATE', 'The team is private and invite only.');
 
     const svcUsersGroups = this.app.service('users/groups');
@@ -102,7 +102,7 @@ export class TeamMemberService {
    */
   async remove (id, params) {
     const team = params.primary;
-    assert(team, 'target team is not exists');
+    assert(team && team.id, 'target team is not exists');
 
     // kick intead leave
     if (params.action === 'kick') {
@@ -139,7 +139,7 @@ export class TeamMemberService {
    */
   async kick (id, params) {
     const team = params.primary;
-    assert(team, 'target team is not exists');
+    assert(team && team.id, 'target team is not exists');
 
     const svcUsers = this.app.service('users');
     const svcUsersGroups = this.app.service('users/groups');

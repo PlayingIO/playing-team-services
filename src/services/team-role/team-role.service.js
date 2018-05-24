@@ -26,7 +26,7 @@ export class TeamRoleService {
    */
   async patch (id, data, params) {
     const team = params.primary;
-    assert(team, 'Team not exists.');
+    assert(team && team.id, 'Team not exists.');
 
     const svcUsers = this.app.service('users');
     const svcUsersGroups = this.app.service('users/groups');
