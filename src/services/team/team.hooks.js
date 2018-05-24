@@ -1,10 +1,12 @@
 import { iff, isProvider } from 'feathers-hooks-common';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
+import { sanitize, validate } from 'mostly-feathers-validate';
 import { hooks as feeds } from 'playing-feed-services';
 
 import TeamEntity from '../../entities/team.entity';
 import notifiers from './team.notifiers';
+import accepts from './team.accepts';
 
 export default function (options = {}) {
   return {
@@ -14,7 +16,9 @@ export default function (options = {}) {
       ],
       create: [
         iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'owner' }))
+          associateCurrentUser({ idField: 'id', as: 'owner' })),
+        sanitize(accepts),
+        validate(accepts),
       ]
     },
     after: {
