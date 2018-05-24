@@ -29,6 +29,10 @@ export default function (options = {}) {
       ],
       patch: [
         feeds.notify('team.accept', notifiers)
+      ],
+      remove: [
+        iff(hooks.isAction('reject'),
+          feeds.notify('team.reject', notifiers))
       ]
     }
   };
