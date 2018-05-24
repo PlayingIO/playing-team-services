@@ -1,5 +1,8 @@
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
+import { sanitize, validate } from 'mostly-feathers-validate';
+
+import accepts from './team-role.accepts';
 
 export default function (options = {}) {
   return {
@@ -9,7 +12,9 @@ export default function (options = {}) {
         cache(options.cache)
       ],
       patch: [
-        hooks.addRouteObject('primary', { service: 'teams' })
+        hooks.addRouteObject('primary', { service: 'teams' }),
+        sanitize(accepts),
+        validate(accepts)
       ]
     },
     after: {

@@ -52,7 +52,7 @@ export class TeamRoleService {
     // process the change if owner or it's a public team
     if (isOwner || team.access === 'PUBLIC') {
       // update members's roles
-      return svcUsersGroups.update(team.id, {
+      return svcUsersGroups.patch(team.id, {
         group: team.id,
         roles: data.roles
       }, { primary: user });
