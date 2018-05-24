@@ -20,6 +20,27 @@ export class TeamInviteService {
     this.app = app;
     this.hooks(defaultHooks(this.options));
   }
+
+  /**
+   * List invitations sent out for a mission
+   */
+  async find (params) {
+    const team = params.primary;
+    assert(team && team.id, 'Team is not exists.');
+
+    // Only invitations sent out by current user will be listed.
+    const svcFeedsActivities = this.app.service('feeds/activities');
+    return svcFeedsActivities.find({
+      primary: `user:${params.user.id}`,
+      query: {
+        verb: 'team.invite',
+        actor: `user:${params.user.id}`,
+        object: `team:${team.id}`,
+        state: 'PENDING',
+        ...params.query
+      }
+    });
+  }
 }
 
 export default function init (app, options, hooks) {
