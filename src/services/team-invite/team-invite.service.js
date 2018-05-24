@@ -149,6 +149,26 @@ export class TeamInviteService {
 
     return activity;
   }
+
+  /**
+   * Cancel a pending invite sent out by the current user
+   */
+  async remove (id, params) {
+    // reject intead cancel
+    if (params.action === 'reject') {
+      return this.reject(id, params);
+    }
+    // check for pending invitation sent by current user
+    const feed = `user:${params.user.id}`;
+    const activity = await feeds.getPendingActivity(this.app, feed, id);
+    if (!activity) {
+      throw new Error('No pending invitation is found for this invite id.');
+    }
+    // cancel from invitor's feed
+    activity.state = 'CANCELED';
+    await feeds.updateActivityState(this.app, activity);
+    return activity;
+  }
 }
 
 export default function init (app, options, hooks) {
