@@ -10,6 +10,12 @@ export default function (options = {}) {
       ],
       find: [
         hooks.addRouteObject('primary', { service: 'teams' }),
+      ],
+      patch: [
+        hooks.addRouteObject('primary', { service: 'teams' }),
+      ],
+      remove: [
+        hooks.addRouteObject('primary', { service: 'teams' }),
       ]
     },
     after: {
