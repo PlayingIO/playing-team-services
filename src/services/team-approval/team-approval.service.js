@@ -21,6 +21,30 @@ export class TeamApprovalService {
     this.hooks(defaultHooks(this.options));
   }
 
+  /**
+   * List pending team join or role change requests
+   */
+  async find (params) {
+    const team = params.primary;
+    assert(team, 'Team is not exists.');
+
+    // must be owner of the team
+    if (!fp.idEquals(team.owner, params.user.id)) {
+      throw new Error('Only team owner can list pending requests.');
+    }
+
+    // check for pending invitation
+    const svcFeedsActivities = this.app.service('feeds/activities');
+    return svcFeedsActivities.find({
+      primary: `notification:${team.owner}`,
+      query: {
+        verb: { $in: ['team.join.request', 'team.roles.request'] },
+        object: `team:${team.id}`,
+        state: 'PENDING'
+      }
+    });
+  }
+
 }
 
 export default function init (app, options, hooks) {
