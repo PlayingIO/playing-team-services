@@ -100,6 +100,55 @@ export class TeamInviteService {
       `notification:${data.player}`        // add to invited player's notification stream
     );
   }
+
+  /**
+   * Accept an invite of current user
+   */
+  async patch (id, data, params) {
+    let team = params.primary;
+    assert(team && team.id, 'Team is not exists.');
+
+    const svcUsersGroups = this.app.service('users/groups');
+
+    // check for pending invitation in notification of current user
+    const notification = `notification:${params.user.id}`;
+    const activity = await feeds.getPendingActivity(this.app, notification, id);
+    if (!activity) {
+      throw new Error('No pending invite is found for this invite id.');
+    }
+
+    // get values from activity
+    const user = helpers.getId(activity.invitee);
+    const roles = activity.roles;
+    assert(user, 'actor not exists in request activity');
+    assert(roles, 'roles not exists in request activity');
+    if (!fp.idEquals(user, params.user.id)) {
+      throw new Error('invitee is not current user');
+    }
+
+    params.locals = { team }; // for notifier
+
+    const performer = fp.find(fp.idPropEq('user', user), team.performers || []);
+    if (!performer) {
+      // add user to team with roles
+      await svcUsersGroups.create({
+        group: team.id,
+        roles: roles
+      }, { 
+        primary: user,
+        user: params.user
+      });
+      activity.state = 'ACCEPTED';
+      await feeds.updateActivityState(this.app, activity);
+      params.locals.activity = activity;
+    } else {
+      activity.state = 'ALREADY';
+      await feeds.updateActivityState(this.app, activity);
+      params.locals.activity = activity;
+    }
+
+    return activity;
+  }
 }
 
 export default function init (app, options, hooks) {

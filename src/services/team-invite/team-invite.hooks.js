@@ -13,6 +13,12 @@ export default function (options = {}) {
       ],
       create: [
         hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
+      ],
+      patch: [
+        hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
+      ],
+      remove: [
+        hooks.addRouteObject('primary', { service: 'teams', select: 'members,*' }),
       ]
     },
     after: {
