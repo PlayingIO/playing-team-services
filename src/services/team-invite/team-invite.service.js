@@ -105,7 +105,7 @@ export class TeamInviteService {
   }
 
   /**
-   * Accept an invite of current user
+   * Accept an invite for current user
    */
   async patch (id, data, params) {
     let team = params.primary;
@@ -121,24 +121,26 @@ export class TeamInviteService {
     }
 
     // get values from activity
-    const user = helpers.getId(activity.invitee);
     const roles = activity.roles;
-    assert(user, 'actor not exists in request activity');
-    assert(roles, 'roles not exists in request activity');
-    if (!fp.idEquals(user, params.user.id)) {
+    const invitee = helpers.getId(activity.invitee);
+    assert(invitee, 'invitee is not exists in request activity');
+    assert(roles, 'roles is not exists in request activity');
+    if (!fp.idEquals(invitee, params.user.id)) {
       throw new Error('invitee is not current user');
     }
 
     params.locals = { team }; // for notifier
 
-    const performer = fp.find(fp.idPropEq('user', user), team.performers || []);
-    if (!performer) {
+    // whether current user is a member already
+    const groups = fp.map(fp.prop('id'), params.user.groups);
+    const member = fp.find(fp.idEquals(team.id), groups || []);
+    if (!member) {
       // add user to team with roles
       await svcUsersGroups.create({
         group: team.id,
         roles: roles
       }, { 
-        primary: user,
+        primary: invitee,
         user: params.user
       });
       activity.state = 'ACCEPTED';
