@@ -59,6 +59,7 @@ export class TeamApprovalService {
       throw new Error('Only owner of the team can approval the request.');
     }
 
+    const svcUsers = this.app.service('users');
     const svcUsersGroups = this.app.service('users/groups');
     const svcFeedsActivities = this.app.service('feeds/activities');
 
@@ -70,23 +71,30 @@ export class TeamApprovalService {
     }
 
     // get values from activity
-    const user = helpers.getId(activity.actor);
+    const actor = helpers.getId(activity.actor);
     const roles = activity.roles;
-    assert(user, 'actor not exists in request activity');
+    assert(actor, 'actor not exists in request activity');
     assert(roles, 'roles not exists in request activity');
+
+    // get request user
+    const user = await svcUsers.get(actor);
+    if (!user) {
+      throw new Error('Request user is not exists');
+    }
 
     params.locals = { team }; // for notifier
 
     switch (activity.verb) {
       case 'team.join.request': {
-        const performer = fp.find(fp.idPropEq('user', user), team.performers || []);
-        if (!performer) {
+        const groups = fp.map(fp.prop('id'), user.groups);
+        const member = fp.find(fp.idEquals(team.id), groups || []);
+        if (!member) {
           // add user to team with roles
           await svcUsersGroups.create({
             group: team.id,
             roles: roles
           }, { 
-            primary: user,
+            primary: actor,
             user: params.user
           });
           activity.state = 'ACCEPTED';
@@ -105,7 +113,7 @@ export class TeamApprovalService {
           group: team.id,
           roles: roles
         }, {
-          primary: user,
+          primary: actor,
           user: params.user
         });
         activity.state = 'ACCEPTED';
