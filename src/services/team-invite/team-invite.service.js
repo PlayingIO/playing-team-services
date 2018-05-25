@@ -54,17 +54,20 @@ export class TeamInviteService {
 
     const svcUsers = this.app.service('users');
     const svcFeedsActivities = this.app.service('feeds/activities');
-    
+
     // must be owner of the team
     if (!fp.idEquals(team.owner, params.user.id)) {
       throw new Error('Only team owner can send invites.');
     }
 
-    // whether target user is a member
+    // whether target user is a member already
     const user = await svcUsers.get(data.player);
-    let groups = fp.map(fp.prop('id'), user.groups);
+    if (!user) {
+      throw new Error('Requested user is not exists');
+    }
+    const groups = fp.map(fp.prop('id'), user.groups);
     const exists = fp.find(fp.idEquals(team.id), groups || []);
-    if (!exists) {
+    if (exists) {
       throw new Error('Requested player is already a part of the team.');
     }
 
@@ -188,7 +191,7 @@ export class TeamInviteService {
     await feeds.updateActivityState(this.app, activity);
 
     params.locals = { team, activity }; // for notifier
-    
+
     return activity;
   }
 }
