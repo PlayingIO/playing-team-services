@@ -82,6 +82,53 @@ class TeamService extends group.Service {
     
     return group;
   }
+
+  /**
+   * Transfer team ownership to another player
+   */
+  async transfer (id, data, params) {
+    let team = params.primary;
+    assert(team && team.id, 'Team is not exists.');
+
+    const svcUsers = this.app.service('users');
+    const svcUsersGroups = this.app.service('users/groups');
+    
+    // must be owner of the team
+    if (!fp.idEquals(team.owner, data.user)) {
+      throw new Error('Only owner of the team can transfer ownership.');
+    }
+    if (fp.idEquals(team.owner, data.player)) {
+      throw new Error('Already owner of the team.');
+    }
+    // get another player
+    const player = await svcUsers.get(data.player);
+    if (!player) {
+      throw new Error('Another player is not exists');
+    }
+    const groups = fp.map(fp.prop('id'), player.groups);
+    const member = fp.find(fp.idEquals(team.id), groups || []);
+
+    if (member) {
+      await svcUsersGroups.create({
+        group: team.id,
+        role: data.roles
+      }, {
+        primary: player,
+        user: params.user
+      });
+    } else {
+      await svcUsersGroups.patch(team.id, {
+        group: team.id,
+        roles: data.roles
+      }, {
+        primary: player,
+        user: params.user
+      });
+    }
+    return super.patch(team.id, {
+      owner: player.id
+    });
+  }
 }
 
 export default function init (app, options, hooks) {
