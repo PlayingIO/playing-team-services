@@ -41,6 +41,9 @@ export class TeamRoleService {
 
     // whether target user is a member
     const user = await svcUsers.get(id);
+    if (!user) {
+      throw new Error('Target user is not exists');
+    }
     let groups = fp.map(fp.prop('id'), user.groups);
     const exists = fp.find(fp.idEquals(team.id), groups || []);
     if (!exists) {
