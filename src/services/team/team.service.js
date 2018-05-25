@@ -94,7 +94,7 @@ class TeamService extends group.Service {
     const svcUsersGroups = this.app.service('users/groups');
     
     // must be owner of the team
-    if (!fp.idEquals(team.owner, data.user)) {
+    if (!fp.idEquals(team.owner, params.user.id)) {
       throw new Error('Only owner of the team can transfer ownership.');
     }
     if (fp.idEquals(team.owner, data.player)) {
@@ -108,7 +108,7 @@ class TeamService extends group.Service {
     const groups = fp.map(fp.prop('id'), player.groups);
     const member = fp.find(fp.idEquals(team.id), groups || []);
 
-    if (member) {
+    if (!member) {
       await svcUsersGroups.create({
         group: team.id,
         role: data.roles

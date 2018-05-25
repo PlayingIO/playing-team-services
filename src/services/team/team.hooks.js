@@ -19,6 +19,12 @@ export default function (options = {}) {
           associateCurrentUser({ idField: 'id', as: 'owner' })),
         sanitize(accepts),
         validate(accepts),
+      ],
+      patch: [
+        iff(hooks.isAction('transfer'),
+          hooks.addRouteObject('primary', { service: 'teams', field: 'id' })),
+        sanitize(accepts),
+        validate(accepts)
       ]
     },
     after: {
