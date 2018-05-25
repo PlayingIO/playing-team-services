@@ -58,7 +58,10 @@ export class TeamRoleService {
       return svcUsersGroups.patch(team.id, {
         group: team.id,
         roles: data.roles
-      }, { primary: user });
+      }, {
+        primary: user,
+        user: params.user
+      });
     } else {
       // check for pending roles request sent by target user
       const invitations = await svcFeedsActivities.find({
