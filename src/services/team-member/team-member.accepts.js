@@ -1,5 +1,4 @@
 import fp from 'mostly-func';
-import { helpers } from 'mostly-feathers-validate';
 import { rolesExists } from '../../helpers';
 
 export default function accepts (context) {
@@ -11,9 +10,7 @@ export default function accepts (context) {
     validates: { exists: rolesExists(svcTeams, 'primary', 'Roles is invalid') },
     required: true, description: 'Roles ' };
 
-  const member = { arg: 'id', type: 'string',
-    validates: { exists: helpers.idExists(svcUsers, 'id', 'Member is not exists') },
-    required: true, description: 'Member Id' };
+  const member = { arg: 'id', type: 'string', required: true, description: 'Member id' };
 
   return {
     create: [ roles ],
