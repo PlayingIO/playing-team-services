@@ -8,9 +8,14 @@ import TeamModel from '../../models/team.model';
 import defaultHooks from './team.hooks';
 import { fulfillTeamRequires } from '../../helpers';
 
+const defaultOptions = {
+  name: 'teams'
+};
+
 class TeamService extends group.Service {
 
   constructor (options) {
+    options = fp.assignAll(defaultOptions, options);
     super(options);
   }
 
