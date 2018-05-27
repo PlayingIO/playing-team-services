@@ -40,6 +40,25 @@ export class TeamLockService {
       lockedAt: new Date()
     });
   }
+
+  /**
+   * Unlock the team
+   */
+  async remove (id, params) {
+    let team = params.primary;
+    assert(team && team.id, 'Team is not exists.');
+
+    const svcTeams = this.app.service('teams');
+
+    // must be owner of the team
+    if (!fp.idEquals(team.owner, params.user.id)) {
+      throw new Error('Only owner of the team can lock the team.');
+    }
+
+    return svcTeams.patch(team.id, {
+      lockedAt: null
+    });
+  }
 }
 
 export default function init (app, options, hooks) {
