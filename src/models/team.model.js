@@ -5,7 +5,8 @@ const fields = {
   definition: { type: 'ObjectId' },        // team definition
   access: { type: String, enum: [          // visibility setting
     'PUBLIC', 'PROTECTED', 'PRIVATE'
-  ]}
+  ]},
+  lockedAt: { type: Date }                 // lock the team from joining/leaving
 };
 
 export default function model (app, name) {
