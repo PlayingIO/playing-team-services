@@ -36,6 +36,10 @@ export class TeamLockService {
       throw new Error('Only owner of the team can lock the team.');
     }
 
+    if (team.lockedAt) {
+      throw new Error('Team is already locked');
+    }
+
     return svcTeams.patch(team.id, {
       lockedAt: new Date()
     });
@@ -53,6 +57,10 @@ export class TeamLockService {
     // must be owner of the team
     if (!fp.idEquals(team.owner, params.user.id)) {
       throw new Error('Only owner of the team can lock the team.');
+    }
+
+    if (!team.lockedAt) {
+      throw new Error('Team is not locked');
     }
 
     return svcTeams.patch(team.id, {
