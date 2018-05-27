@@ -1,6 +1,7 @@
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 import { hooks as feeds } from 'playing-feed-services';
+import { authorize } from 'playing-permissions';
 
 import notifiers from './team-lock.notifiers';
 
@@ -9,6 +10,7 @@ export default function (options = {}) {
     before: {
       all: [
         hooks.authenticate('jwt', options.auth),
+        authorize('teams'),
         cache(options.cache)
       ],
       create: [
