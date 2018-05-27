@@ -1,5 +1,8 @@
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
+import { hooks as feeds } from 'playing-feed-services';
+
+import notifiers from './team-lock.notifiers';
 
 export default function (options = {}) {
   return {
@@ -19,6 +22,12 @@ export default function (options = {}) {
       all: [
         cache(options.cache),
         hooks.responder()
+      ],
+      create: [
+        feeds.notify('group.lock', notifiers)
+      ],
+      remove: [
+        feeds.notify('group.unlock', notifiers)
       ]
     }
   };
