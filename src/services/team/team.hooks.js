@@ -20,11 +20,17 @@ export default function (options = {}) {
         sanitize(accepts),
         validate(accepts),
       ],
+      update: [
+        sanitize(accepts),
+        validate(accepts),
+        hooks.discardFields('owner', 'createdAt', 'updatedAt', 'destroyedAt')
+      ],
       patch: [
         iff(hooks.isAction('transfer'),
-          hooks.addRouteObject('primary', { service: 'teams', field: 'id' })),
+          hooks.addRouteObject('primary', { service: 'teams', field: 'id', select: 'members,*' })),
         sanitize(accepts),
-        validate(accepts)
+        validate(accepts),
+        hooks.discardFields('owner', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
     after: {
@@ -34,6 +40,9 @@ export default function (options = {}) {
       ],
       create: [
         feeds.notify('group.create', notifiers)
+      ],
+      patch: [
+        iff(hooks.isAction('transfer'), feeds.notify('group.transfer', notifiers))
       ],
       remove: [
         feeds.notify('group.delete', notifiers)
