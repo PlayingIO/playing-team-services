@@ -12,7 +12,7 @@ const joinTeam = (context) => {
     const custom = {
       actor: `user:${actor}`,
       verb: 'team.join',
-      message: 'Join the team',
+      message: '${actor} has joined the team',
       roles: context.data.roles
     };
     return [
@@ -26,7 +26,7 @@ const joinTeam = (context) => {
     const custom = {
       actor: `user:${actor}`,
       verb: 'team.join.request',
-      message: 'Request join the team',
+      message: '${actor} requests to join the team',
       roles: context.data.roles,
       state: 'PENDING'
     };
@@ -46,7 +46,7 @@ const leaveTeam = (context) => {
   const custom = {
     actor: `user:${actor}`,
     verb: 'team.leave',
-    message: 'Leave the team'
+    message: 'has left the team'
   };
   return [
     createTeamActivity(context, team, custom),
@@ -65,7 +65,7 @@ const kickTeam = (context) => {
   const custom = {
     actor: `user:${actor}`,
     verb: 'team.kick',
-    message: 'Join the team',
+    message: 'is kicked out of the team',
     roles: context.data.roles
   };
   return [
