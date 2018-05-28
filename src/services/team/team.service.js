@@ -61,14 +61,32 @@ class TeamService extends group.Service {
     if (teamDef && teamDef.permissions) {
       const createPermissions = fp.flatMap(permission => {
         return fp.map(([action, permit]) => {
-          return svcUserPermissions.create({
-            actions: [action],
-            subject: 'team:' + group.id,
+          const rule = {
+            subject: `team:${group.id}`,
             role: permission.role,
-            inverted: !permit,
+            inverted: !permission.permits[action],
             creator: data.owner,
             user: group.id
-          });
+          };
+          switch (action) {
+            case 'lock':
+              rule.actions = ['locks/create', 'locks/remove'];
+              break;
+            case 'peer':
+              rule.actions = ['invites/create', 'invites/remove'];
+              rule.conditions = { peer: true };
+              break;
+            case 'assign':
+              rule.actions = ['invites/create', 'invites/remove'];
+              rule.conditions = { assign: true };
+              break;
+            case 'leave':
+              rule.actions = ['members/remove'];
+              break;
+            default:
+              throw new Error(`Unkown permission action ${permit} for team creating`);
+          }
+          return svcUserPermissions.create(rule);
         }, fp.toPairs(permission.permits || {}));
       }, teamDef.permissions);
       const permissions = await Promise.all(createPermissions);
