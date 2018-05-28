@@ -12,7 +12,7 @@ const lockTeam = (context) => {
   const custom = {
     actor: `user:${actor}`,
     verb: 'group.lock',
-    message: 'Lock the team',
+    message: 'Team is locked',
   };
   return [
     createTeamActivity(context, team, custom),
@@ -31,7 +31,7 @@ const unlockTeam = (context) => {
   const custom = {
     actor: `user:${actor}`,
     verb: 'group.unlock',
-    message: 'Unlock the team',
+    message: 'Team is unlocked',
   };
   return [
     createTeamActivity(context, team, custom),
