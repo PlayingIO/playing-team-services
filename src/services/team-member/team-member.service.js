@@ -123,7 +123,7 @@ export class TeamMemberService {
       throw new Error('You are not a member of this team.');
     }
 
-    groups = await svcUsersGroups.remove(null, {
+    groups = await svcUsersGroups.remove(team.id, {
       primary: params.user,
       user: params.user,
       query: { group: team.id }
@@ -164,7 +164,7 @@ export class TeamMemberService {
       throw new Error('Target user is not a member of this team.');
     }
 
-    groups = await svcUsersGroups.remove(null, {
+    groups = await svcUsersGroups.remove(team.id, {
       primary: id,
       user: params.user,
       query: { group: team.id }
