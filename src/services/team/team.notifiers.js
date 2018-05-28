@@ -12,7 +12,7 @@ const createTeam = (context) => {
   const custom = {
     actor: `user:${actor}`,
     verb: 'group.create',
-    message: 'Create a team',
+    message: 'Team was created by ${actor}',
   };
   return [
     createTeamActivity(context, team, custom),
@@ -30,7 +30,7 @@ const deleteTeam = (context) => {
   const custom = {
     actor: `user:${actor}`,
     verb: 'group.delete',
-    message: 'Delete a team',
+    message: 'Team was disbanded by ${actor}',
   };
   return [
     createTeamActivity(context, team, custom),
@@ -49,7 +49,7 @@ const transferTeam = (context) => {
   const custom = {
     actor: `user:${actor}`,
     verb: 'group.transfer',
-    message: 'Transfer the ownership of the team',
+    message: 'Ownership of the team is transfered to ${newOnwer}',
     roles: context.data.roles,
     newOwner: `user:${newOwner}`
   };
