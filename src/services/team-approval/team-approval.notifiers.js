@@ -19,14 +19,14 @@ const acceptTeam = (context) => {
   if (activity.verb === 'team.roles.request') {
     custom = {
       verb: 'team.roles.accept',
-      message: 'Roles change request of ${player} is accepted',
+      message: 'Roles change request of ${player} was accepted',
       ...custom
     };
   }
   if (activity.verb === 'team.join.request') {
     custom = {
       verb: 'team.join.accept',
-      message: 'Join request of ${player} is accepted',
+      message: 'Join request of ${player} was accepted',
       ...custom
     };
   }
@@ -55,14 +55,14 @@ const rejectTeam = (context) => {
   if (activity.verb === 'team.roles.request') {
     custom = {
       verb: 'team.roles.reject',
-      message: 'Roles change request of ${player} is rejected',
+      message: 'Roles change request of ${player} was rejected',
       ...custom
     };
   }
   if (activity.verb === 'team.join.request') {
     custom = {
       verb: 'team.join.reject',
-      message: 'Join request of ${player} is rejected',
+      message: 'Join request of ${player} was rejected',
       ...custom
     };
   }

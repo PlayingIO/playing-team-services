@@ -65,7 +65,7 @@ const kickTeam = (context) => {
   const custom = {
     actor: `user:${actor}`,
     verb: 'team.kick',
-    message: 'is kicked out of the team',
+    message: '${player} was kicked out of the team',
     roles: context.data.roles
   };
   return [
