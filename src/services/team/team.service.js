@@ -152,6 +152,32 @@ class TeamService extends group.Service {
       owner: player.id
     });
   }
+
+  /**
+   * Disband a team
+   */
+  async remove (id, params) {
+    let team = params.primary;
+    assert(team && team.id, 'Team is not exists.');
+
+    const svcUsers = this.app.service('users');
+    const svcUsersGroups = this.app.service('users/groups');
+    
+    // must be owner of the team
+    if (!fp.idEquals(team.owner, params.user.id)) {
+      throw new Error('Only owner can disband the team.');
+    }
+ 
+    const removeMembers = fp.map(player => {
+      return svcUsersGroups.remove(team.id, {
+        primary: player,
+        user: params.user,
+        query: { group: team.id }
+      });
+    });
+    await Promise.all(removeMembers(team.members || []));
+    return super.remove(team.id, { $soft: true });
+  }
 }
 
 export default function init (app, options, hooks) {
