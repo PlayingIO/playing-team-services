@@ -13,7 +13,7 @@ const rolesTeam = (context) => {
     const custom = {
       actor: `user:${actor}`,
       verb: 'team.roles',
-      message: 'Change roles in the team',
+      message: '${actor} has changed roles of the team',
       roles: context.data.roles,
       player: `user:${player}`
     };
@@ -28,7 +28,7 @@ const rolesTeam = (context) => {
     const custom = {
       actor: `user:${actor}`,
       verb: 'team.roles.request',
-      message: 'Request roles change in the team',
+      message: '${actor} requests to change roles of the team',
       roles: context.data.roles,
       state: 'PENDING',
       player: `user:${player}`
