@@ -2,7 +2,7 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import fp from 'mostly-func';
 import { helpers } from 'mostly-feathers-mongoose';
-import { helpers as feeds } from 'playing-feed-services';
+import feeds from 'playing-feed-common';
 
 import defaultHooks from './team-approval.hooks';
 
@@ -93,7 +93,7 @@ export class TeamApprovalService {
           await svcUsersGroups.create({
             group: team.id,
             roles: roles
-          }, { 
+          }, {
             primary: actor,
             user: params.user
           });

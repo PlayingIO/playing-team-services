@@ -1,6 +1,6 @@
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
-import { hooks as feeds } from 'playing-feed-services';
+import feeds from 'playing-feed-common';
 import { authorize } from 'playing-permissions';
 
 import notifiers from './team-lock.notifiers';

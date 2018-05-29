@@ -2,7 +2,7 @@ import { iff, isProvider } from 'feathers-hooks-common';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
 import { sanitize, validate } from 'mostly-feathers-validate';
-import { hooks as feeds } from 'playing-feed-services';
+import feeds from 'playing-feed-common';
 
 import TeamEntity from '../../entities/team.entity';
 import notifiers from './team.notifiers';
