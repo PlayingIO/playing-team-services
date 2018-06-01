@@ -10,7 +10,7 @@ export default function (options = {}) {
     before: {
       all: [
         hooks.authenticate('jwt', options.auth),
-        authorize('teams'),
+        authorize('team', { primary: { field: 'primary' } }), // check permission on primary team
         cache(options.cache)
       ],
       create: [
