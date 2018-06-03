@@ -1,7 +1,7 @@
 Playing Games Team Services
 ===========================
 
-Game teams management microservices for playful applications.
+Game teams management microservices for building playful applications.
 
 # Usage
 
