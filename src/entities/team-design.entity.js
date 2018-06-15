@@ -5,6 +5,6 @@ const TeamDesignEntity = new Entity('TeamDesign', {
   image: { using: BlobEntity }
 });
 
-TeamDesignEntity.excepts('_id');
+TeamDesignEntity.discard('_id');
 
 export default TeamDesignEntity.asImmutable();
