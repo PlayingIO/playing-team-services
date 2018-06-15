@@ -5,6 +5,6 @@ const TeamDesignEntity = new Entity('TeamDesign', {
   image: { using: BlobEntity }
 });
 
-TeamDesignEntity.excepts('updatedAt', 'destroyedAt');
+TeamDesignEntity.excepts('_id');
 
 export default TeamDesignEntity.asImmutable();
