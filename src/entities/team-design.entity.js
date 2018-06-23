@@ -7,4 +7,4 @@ const TeamDesignEntity = new Entity('TeamDesign', {
 
 TeamDesignEntity.discard('_id');
 
-export default TeamDesignEntity.asImmutable();
+export default TeamDesignEntity.freeze();

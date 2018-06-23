@@ -3,4 +3,4 @@ import { entities as users } from 'playing-user-services';
 
 const TeamEntity = users.group.extend('TeamEntity');
 
-export default TeamEntity.asImmutable();
+export default TeamEntity.freeze();
