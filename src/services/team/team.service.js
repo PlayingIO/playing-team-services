@@ -28,8 +28,8 @@ class TeamService extends group.Service {
    * create a group by team definition
    */
   async create (data, params) {
-    assert(data.groupname, 'data.groupname not provided');
-    assert(data.label, 'data.label not provided');
+    assert(data.groupname, 'groupname not provided');
+    assert(data.label, 'label not provided');
     data.access = data.access || (data.isPublic? 'PUBLIC' : 'PROTECTED');
     delete data.isPublic;
 
@@ -40,7 +40,7 @@ class TeamService extends group.Service {
     const getTeamDefinition = (id) => id? svcTeamDesigns.get(id) : Promise.resolve(null);
 
     const teamDef = await getTeamDefinition(data.definition);
-    if (data.definition) assert(teamDef, 'data.definition not exists');
+    if (data.definition) assert(teamDef, 'definition not exists');
     if (teamDef) {
       // creation requirements
       if (teamDef.settings && teamDef.settings.requires) {
