@@ -1,4 +1,4 @@
-import { iff, isProvider } from 'feathers-hooks-common';
+import { iff } from 'feathers-hooks-common';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
 import { sanitize, validate } from 'mostly-feathers-validate';
@@ -15,8 +15,7 @@ export default function (options = {}) {
         hooks.authenticate('jwt', options.auth, 'scores,actions')
       ],
       create: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'owner' })),
+        associateCurrentUser({ idField: 'id', as: 'owner' }),
         sanitize(accepts),
         validate(accepts),
       ],
