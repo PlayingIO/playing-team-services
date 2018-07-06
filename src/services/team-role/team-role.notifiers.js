@@ -6,7 +6,7 @@ import { createTeamActivity, membersNotifications } from '../../helpers';
 // change roles team activity
 const rolesTeam = (context) => {
   const { team } = context.params.locals;
-  const actor = context.params.user.id;
+  const actor = helpers.getCurrentUser(context);
   const player = context.id;
   if (team.access === 'PUBLIC') {
     const notifications = membersNotifications(team.members);

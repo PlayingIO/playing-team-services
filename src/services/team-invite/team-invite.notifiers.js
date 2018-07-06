@@ -8,7 +8,7 @@ const acceptInvite = (context) => {
   const { team, activity } = context.params.locals;
   if (!activity || activity.state !== 'ACCEPTED') return;
 
-  const actor = context.params.user.id;
+  const actor = helpers.getCurrentUser(context);
   const inviter = helpers.getId(activity.actor);
   const notifications = membersNotifications(team.members);
   let custom = {
@@ -32,7 +32,7 @@ const rejectInvite = (context) => {
   const { team, activity } = context.params.locals;
   if (!activity || activity.state !== 'REJECTED') return;
 
-  const actor = context.params.user.id;
+  const actor = helpers.getCurrentUser(context);
   const inviter = helpers.getId(activity.actor);
   let custom = {
     actor: `user:${actor}`,
@@ -43,7 +43,7 @@ const rejectInvite = (context) => {
   };
   return [
     createTeamActivity(context, team, custom),
-    `notification:${actor}`,       // add to player's 
+    `notification:${actor}`,       // add to player's
     `user:${inviter}`              // add to inviter's notification stream
   ];
 };

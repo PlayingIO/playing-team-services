@@ -7,7 +7,7 @@ import { createTeamActivity, membersNotifications } from '../../helpers';
 const createTeam = (context) => {
   const team = helpers.getHookData(context);
   if (!team) return;
-  const actor = context.params.user.id;
+  const actor = helpers.getCurrentUser(context);
   const notifications = membersNotifications(team.members);
   const custom = {
     actor: `user:${actor}`,
@@ -25,7 +25,7 @@ const createTeam = (context) => {
 const deleteTeam = (context) => {
   const team = helpers.getHookData(context);
   if (!team) return;
-  const actor = context.params.user.id;
+  const actor = helpers.getCurrentUser(context);
   const notifications = membersNotifications(team.members);
   const custom = {
     actor: `user:${actor}`,
@@ -43,7 +43,7 @@ const deleteTeam = (context) => {
 const transferTeam = (context) => {
   const team = helpers.getHookData(context);
   if (!team) return;
-  const actor = context.params.user.id;
+  const actor = helpers.getCurrentUser(context);
   const newOwner = context.data.player;
   const notifications = membersNotifications(team.members);
   const custom = {

@@ -8,7 +8,7 @@ const acceptTeam = (context) => {
   const { team, activity } = context.params.locals;
   if (!activity || activity.state !== 'ACCEPTED') return [];
 
-  const actor = context.params.user.id;
+  const actor = helpers.getCurrentUser(context);
   const player = helpers.getId(activity.actor);
   const notifications = membersNotifications(team.members);
   let custom = {
@@ -45,9 +45,9 @@ const rejectTeam = (context) => {
   const { team, activity } = context.params.locals;
   if (!activity || activity.state !== 'REJECTED') return [];
 
-  const actor = context.params.user.id;
+  const actor = helpers.getCurrentUser(context);
   const player = helpers.getId(activity.actor);
-  let custom = {  
+  let custom = {
     actor: `user:${actor}`,
     player: `user:${player}`,
     roles: activity.roles
