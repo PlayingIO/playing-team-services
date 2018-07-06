@@ -6,9 +6,9 @@ import { createTeamActivity, membersNotifications } from '../../helpers';
 // request accept activity
 const acceptTeam = (context) => {
   const { team, activity } = context.params.locals;
-  if (!activity || activity.state !== 'ACCEPTED') return [];
-
   const actor = helpers.getCurrentUser(context);
+  if (!activity || activity.state !== 'ACCEPTED' || !actor) return;
+
   const player = helpers.getId(activity.actor);
   const notifications = membersNotifications(team.members);
   let custom = {
@@ -43,9 +43,9 @@ const acceptTeam = (context) => {
 // request reject activity
 const rejectTeam = (context) => {
   const { team, activity } = context.params.locals;
-  if (!activity || activity.state !== 'REJECTED') return [];
-
   const actor = helpers.getCurrentUser(context);
+  if (!activity || activity.state !== 'REJECTED' || !actor) return;
+
   const player = helpers.getId(activity.actor);
   let custom = {
     actor: `user:${actor}`,

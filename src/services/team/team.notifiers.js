@@ -6,8 +6,9 @@ import { createTeamActivity, membersNotifications } from '../../helpers';
 // create team activity
 const createTeam = (context) => {
   const team = helpers.getHookData(context);
-  if (!team) return;
   const actor = helpers.getCurrentUser(context);
+  if (!team || !actor) return;
+
   const notifications = membersNotifications(team.members);
   const custom = {
     actor: `user:${actor}`,
@@ -24,8 +25,9 @@ const createTeam = (context) => {
 // delete team activity
 const deleteTeam = (context) => {
   const team = helpers.getHookData(context);
-  if (!team) return;
   const actor = helpers.getCurrentUser(context);
+  if (!team || !actor) return;
+
   const notifications = membersNotifications(team.members);
   const custom = {
     actor: `user:${actor}`,
@@ -42,8 +44,9 @@ const deleteTeam = (context) => {
 // transfer ownership of mission activity
 const transferTeam = (context) => {
   const team = helpers.getHookData(context);
-  if (!team) return;
   const actor = helpers.getCurrentUser(context);
+  if (!team || !actor) return;
+
   const newOwner = context.data.player;
   const notifications = membersNotifications(team.members);
   const custom = {

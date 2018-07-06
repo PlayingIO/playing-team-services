@@ -6,9 +6,9 @@ import { createTeamActivity, membersNotifications } from '../../helpers';
 // invite accept activity
 const acceptInvite = (context) => {
   const { team, activity } = context.params.locals;
-  if (!activity || activity.state !== 'ACCEPTED') return;
-
   const actor = helpers.getCurrentUser(context);
+  if (!activity || activity.state !== 'ACCEPTED' || !actor) return;
+
   const inviter = helpers.getId(activity.actor);
   const notifications = membersNotifications(team.members);
   let custom = {
@@ -30,9 +30,9 @@ const acceptInvite = (context) => {
 // invite reject activity
 const rejectInvite = (context) => {
   const { team, activity } = context.params.locals;
-  if (!activity || activity.state !== 'REJECTED') return;
-
   const actor = helpers.getCurrentUser(context);
+  if (!activity || activity.state !== 'REJECTED' || !actor) return;
+
   const inviter = helpers.getId(activity.actor);
   let custom = {
     actor: `user:${actor}`,

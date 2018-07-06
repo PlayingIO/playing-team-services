@@ -7,6 +7,8 @@ import { createTeamActivity, membersNotifications } from '../../helpers';
 const rolesTeam = (context) => {
   const { team } = context.params.locals;
   const actor = helpers.getCurrentUser(context);
+  if (!team || !actor) return;
+
   const player = context.id;
   if (team.access === 'PUBLIC') {
     const notifications = membersNotifications(team.members);

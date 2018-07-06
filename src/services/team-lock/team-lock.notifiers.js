@@ -6,8 +6,9 @@ import { createTeamActivity, membersNotifications } from '../../helpers';
 // lock team activity
 const lockTeam = (context) => {
   const team = helpers.getHookData(context);
-  if (!team) return;
   const actor = helpers.getCurrentUser(context);
+  if (!team || !actor) return;
+
   const notifications = membersNotifications(team.members);
   const custom = {
     actor: `user:${actor}`,
@@ -25,8 +26,9 @@ const lockTeam = (context) => {
 // unlock team activity
 const unlockTeam = (context) => {
   const team = helpers.getHookData(context);
-  if (!team) return;
   const actor = helpers.getCurrentUser(context);
+  if (!team || !actor) return;
+
   const notifications = membersNotifications(team.members);
   const custom = {
     actor: `user:${actor}`,

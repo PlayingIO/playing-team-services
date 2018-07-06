@@ -7,6 +7,8 @@ import { createTeamActivity, membersNotifications } from '../../helpers';
 const joinTeam = (context) => {
   const { team } = context.params.locals;
   const actor = helpers.getCurrentUser(context);
+  if (!team || !actor) return;
+
   if (team.access === 'PUBLIC') {
     const notifications = membersNotifications(team.members);
     const custom = {
@@ -42,6 +44,8 @@ const joinTeam = (context) => {
 const leaveTeam = (context) => {
   const { team } = context.params.locals;
   const actor = helpers.getCurrentUser(context);
+  if (!team || !actor) return;
+
   const notifications = membersNotifications(team.members);
   const custom = {
     actor: `user:${actor}`,
@@ -60,6 +64,8 @@ const leaveTeam = (context) => {
 const kickTeam = (context) => {
   const { team } = context.params.locals;
   const actor = helpers.getCurrentUser(context);
+  if (!team || !actor) return;
+
   const player = context.id;
   const notifications = membersNotifications(team.members);
   const custom = {
