@@ -1,5 +1,5 @@
-import Entity from 'mostly-entity';
-import { BlobEntity } from 'playing-content-common';
+const Entity = require('mostly-entity');
+const { BlobEntity } = require('playing-content-common');
 
 const TeamDesignEntity = new Entity('TeamDesign', {
   image: { using: BlobEntity }
@@ -7,4 +7,4 @@ const TeamDesignEntity = new Entity('TeamDesign', {
 
 TeamDesignEntity.discard('_id');
 
-export default TeamDesignEntity.freeze();
+module.exports = TeamDesignEntity.freeze();
