@@ -9,11 +9,10 @@ const fields = {
   lockedAt: { type: Date }                 // lock the team from joining/leaving
 };
 
-export default function model (app, name) {
+module.exports = function model (app, name) {
   const mongoose = app.get('mongoose');
   const GroupModel = mongoose.model('group');
   const schema = new mongoose.Schema(fields);
   return GroupModel.discriminator(name, schema);
-}
-
-model.schema = fields;
+};
+module.exports.schema = fields;
