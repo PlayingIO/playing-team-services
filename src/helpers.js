@@ -1,14 +1,14 @@
-import assert from 'assert';
-import fp from 'mostly-func';
-import { helpers } from 'mostly-feathers-mongoose';
-import rules from 'playing-rule-common';
+const assert = require('assert');
+const fp = require('mostly-func');
+const { helpers } = require('mostly-feathers-mongoose');
+const rules = require('playing-rule-common');
 
-export const fulfillTeamRequires = (team, user) => {
+const fulfillTeamRequires = (team, user) => {
   return rules.fulfillRequires(user, [], team.settings.requires);
 };
 
 // validator for roles
-export const rolesExists = (service, id, message) => async (val, params) => {
+const rolesExists = (service, id, message) => async (val, params) => {
   assert(params[id], `rolesExists '${id}' is not exists in validation params`);
   const team = fp.isIdLike(params[id])? await service.get(params[id]) : params[id];
   const roles = fp.keys(val);
@@ -21,7 +21,7 @@ export const rolesExists = (service, id, message) => async (val, params) => {
 };
 
 // create a group activity
-export const createTeamActivity = (context, team, custom) => {
+const createTeamActivity = (context, team, custom) => {
   const actor = helpers.getId(team.owner);
   return {
     actor: `user:${actor}`,
@@ -34,7 +34,14 @@ export const createTeamActivity = (context, team, custom) => {
 };
 
 // notification feeds of all team members
-export const membersNotifications = function (members, excepts = []) {
+const membersNotifications = function (members, excepts = []) {
   const users = fp.without(excepts, fp.map(fp.prop('id'), members || []));
   return fp.map(fp.concat('notification:'), users);
+};
+
+module.exports = {
+  createTeamActivity,
+  fulfillTeamRequires,
+  membersNotifications,
+  rolesExists
 };
