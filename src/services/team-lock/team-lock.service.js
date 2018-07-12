@@ -1,8 +1,8 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import fp from 'mostly-func';
+const assert = require('assert');
+const makeDebug = require('debug');
+const fp = require('mostly-func');
 
-import defaultHooks from './team-lock.hooks';
+const defaultHooks = require('./team-lock.hooks');
 
 const debug = makeDebug('playing:team-services:teams/locks');
 
@@ -10,7 +10,7 @@ const defaultOptions = {
   name: 'teams/locks'
 };
 
-export class TeamLockService {
+class TeamLockService {
   constructor (options) {
     this.options = fp.assignAll(defaultOptions, options);
     this.name = this.options.name;
@@ -69,8 +69,7 @@ export class TeamLockService {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   return new TeamLockService(options);
-}
-
-init.Service = TeamLockService;
+};
+module.exports.Service = TeamLockService;

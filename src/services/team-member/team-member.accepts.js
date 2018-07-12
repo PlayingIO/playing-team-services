@@ -1,7 +1,7 @@
-import fp from 'mostly-func';
-import { rolesExists } from '../../helpers';
+const fp = require('mostly-func');
+const { rolesExists } = require('../../helpers');
 
-export default function accepts (context) {
+module.exports = function accepts (context) {
   const svcTeams = context.app.service('teams');
   const svcUsers = context.app.service('users');
 
@@ -17,4 +17,4 @@ export default function accepts (context) {
     remove: [ member ],
     kick: [ member ]
   };
-}
+};

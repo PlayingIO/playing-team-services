@@ -1,10 +1,10 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import fp from 'mostly-func';
-import { helpers } from 'mostly-feathers-mongoose';
-import feeds from 'playing-feed-common';
+const assert = require('assert');
+const makeDebug = require('debug');
+const fp = require('mostly-func');
+const { helpers } = require('mostly-feathers-mongoose');
+const feeds = require('playing-feed-common');
 
-import defaultHooks from './team-approval.hooks';
+const defaultHooks = require('./team-approval.hooks');
 
 const debug = makeDebug('playing:team-services:teams/approvals');
 
@@ -12,7 +12,7 @@ const defaultOptions = {
   name: 'teams/approvals'
 };
 
-export class TeamApprovalService {
+class TeamApprovalService {
   constructor (options) {
     this.options = fp.assignAll(defaultOptions, options);
     this.name = this.options.name;
@@ -177,8 +177,7 @@ export class TeamApprovalService {
 
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   return new TeamApprovalService(options);
-}
-
-init.Service = TeamApprovalService;
+};
+module.exports.Service = TeamApprovalService;

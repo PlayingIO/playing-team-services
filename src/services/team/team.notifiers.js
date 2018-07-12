@@ -1,7 +1,7 @@
-import fp from 'mostly-func';
-import { helpers } from 'mostly-feathers-mongoose';
+const fp = require('mostly-func');
+const { helpers } = require('mostly-feathers-mongoose');
 
-import { createTeamActivity, membersNotifications } from '../../helpers';
+const { createTeamActivity, membersNotifications } = require('../../helpers');
 
 // create team activity
 const createTeam = (context) => {
@@ -65,7 +65,7 @@ const transferTeam = (context) => {
   ];
 };
 
-export default {
+module.exports = {
   'group.create': createTeam,
   'group.delete': deleteTeam,
   'group.transfer': transferTeam

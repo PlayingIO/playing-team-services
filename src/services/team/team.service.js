@@ -1,12 +1,12 @@
-import assert from 'assert';
-import mongoose from 'mongoose';
-import { createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
-import { group } from 'playing-user-services';
+const assert = require('assert');
+const mongoose = require('mongoose');
+const { createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
+const { group } = require('playing-user-services');
 
-import TeamModel from '../../models/team.model';
-import defaultHooks from './team.hooks';
-import { fulfillTeamRequires } from '../../helpers';
+const TeamModel = require('../../models/team.model');
+const defaultHooks = require('./team.hooks');
+const { fulfillTeamRequires } = require('../../helpers');
 
 const defaultOptions = {
   name: 'teams'
@@ -180,9 +180,8 @@ class TeamService extends group.Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'team', ...options };
   return createService(app, TeamService, TeamModel, options);
-}
-
-init.Service = TeamService;
+};
+module.exports.Service = TeamService;

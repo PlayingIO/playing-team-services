@@ -1,8 +1,8 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import fp from 'mostly-func';
+const assert = require('assert');
+const makeDebug = require('debug');
+const fp = require('mostly-func');
 
-import defaultHooks from './team-member.hooks';
+const defaultHooks = require('./team-member.hooks');
 
 const debug = makeDebug('playing:team-services:teams/members');
 
@@ -10,7 +10,7 @@ const defaultOptions = {
   name: 'teams/members'
 };
 
-export class TeamMemberService {
+class TeamMemberService {
   constructor (options) {
     this.options = fp.assignAll(defaultOptions, options);
     this.name = this.options.name;
@@ -176,8 +176,7 @@ export class TeamMemberService {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   return new TeamMemberService(options);
-}
-
-init.Service = TeamMemberService;
+};
+module.exports.Service = TeamMemberService;

@@ -1,7 +1,7 @@
-import fp from 'mostly-func';
-import { helpers } from 'mostly-feathers-mongoose';
+const fp = require('mostly-func');
+const { helpers } = require('mostly-feathers-mongoose');
 
-import { createTeamActivity, membersNotifications } from '../../helpers';
+const { createTeamActivity, membersNotifications } = require('../../helpers');
 
 // request accept activity
 const acceptTeam = (context) => {
@@ -73,7 +73,7 @@ const rejectTeam = (context) => {
   ];
 };
 
-export default {
+module.exports = {
   'team.accept': acceptTeam,
   'team.reject': rejectTeam
 };

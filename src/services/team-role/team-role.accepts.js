@@ -1,6 +1,6 @@
-import { rolesExists } from '../../helpers';
+const { rolesExists } = require('../../helpers');
 
-export default function accepts (context) {
+module.exports = function accepts (context) {
   const svcTeams = context.app.service('teams');
 
   // validation rules
@@ -13,4 +13,4 @@ export default function accepts (context) {
   return {
     patch: [ member, roles ]
   };
-}
+};

@@ -1,7 +1,7 @@
-import fp from 'mostly-func';
-import { helpers } from 'mostly-feathers-mongoose';
+const fp = require('mostly-func');
+const { helpers } = require('mostly-feathers-mongoose');
 
-import { createTeamActivity, membersNotifications } from '../../helpers';
+const { createTeamActivity, membersNotifications } = require('../../helpers');
 
 // lock team activity
 const lockTeam = (context) => {
@@ -43,7 +43,7 @@ const unlockTeam = (context) => {
   ];
 };
 
-export default {
+module.exports = {
   'group.lock': lockTeam,
   'group.unlock': unlockTeam
 };

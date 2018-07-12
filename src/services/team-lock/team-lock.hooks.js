@@ -1,11 +1,11 @@
-import { hooks } from 'mostly-feathers-mongoose';
-import { cache } from 'mostly-feathers-cache';
-import feeds from 'playing-feed-common';
-import { authorize } from 'playing-permissions';
+const { hooks } = require('mostly-feathers-mongoose');
+const { cache } = require('mostly-feathers-cache');
+const feeds = require('playing-feed-common');
+const { authorize } = require('playing-permissions');
 
-import notifiers from './team-lock.notifiers';
+const notifiers = require('./team-lock.notifiers');
 
-export default function (options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [
@@ -33,4 +33,4 @@ export default function (options = {}) {
       ]
     }
   };
-}
+};

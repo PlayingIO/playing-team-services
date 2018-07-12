@@ -1,14 +1,14 @@
-import { iff } from 'feathers-hooks-common';
-import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
-import { hooks } from 'mostly-feathers-mongoose';
-import { sanitize, validate } from 'mostly-feathers-validate';
-import feeds from 'playing-feed-common';
+const { iff } = require('feathers-hooks-common');
+const { associateCurrentUser, queryWithCurrentUser } = require('feathers-authentication-hooks');
+const { hooks } = require('mostly-feathers-mongoose');
+const { sanitize, validate } = require('mostly-feathers-validate');
+const feeds = require('playing-feed-common');
 
-import TeamEntity from '../../entities/team.entity';
-import notifiers from './team.notifiers';
-import accepts from './team.accepts';
+const TeamEntity = require('../../entities/team.entity');
+const notifiers = require('./team.notifiers');
+const accepts = require('./team.accepts');
 
-export default function (options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [
@@ -51,4 +51,4 @@ export default function (options = {}) {
       ]
     }
   };
-}
+};
