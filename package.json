@@ -1,6 +1,6 @@
 {
   "name": "playing-team-services",
-  "version": "1.0.18",
+  "version": "1.1.0",
   "description": "Game teams management microservices for building playful applications",
   "author": "Forafish",
   "license": "MIT",
