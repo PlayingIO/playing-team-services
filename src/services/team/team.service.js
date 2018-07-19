@@ -102,7 +102,7 @@ class TeamService extends group.Service {
         user: params.user
       });
     }
-    
+
     return group;
   }
 
@@ -115,7 +115,7 @@ class TeamService extends group.Service {
 
     const svcUsers = this.app.service('users');
     const svcUsersGroups = this.app.service('users/groups');
-    
+
     // must be owner of the team
     if (!fp.idEquals(team.owner, params.user.id)) {
       throw new Error('Only owner of the team can transfer ownership.');
@@ -162,12 +162,12 @@ class TeamService extends group.Service {
 
     const svcUsers = this.app.service('users');
     const svcUsersGroups = this.app.service('users/groups');
-    
+
     // must be owner of the team
     if (!fp.idEquals(team.owner, params.user.id)) {
       throw new Error('Only owner can disband the team.');
     }
- 
+
     const removeMembers = fp.map(player => {
       return svcUsersGroups.remove(team.id, {
         primary: player,
